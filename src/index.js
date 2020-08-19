@@ -6,6 +6,7 @@ import { blue } from 'kleur';
 import { map, series } from 'asyncro';
 import glob from 'tiny-glob/sync';
 import autoprefixer from 'autoprefixer';
+import cssImport from 'postcss-import';
 import cssnano from 'cssnano';
 import { rollup, watch } from 'rollup';
 import commonjs from '@rollup/plugin-commonjs';
@@ -17,6 +18,7 @@ import alias from '@rollup/plugin-alias';
 import postcss from 'rollup-plugin-postcss';
 import typescript from 'rollup-plugin-typescript2';
 import json from '@rollup/plugin-json';
+import eik from '@eik/rollup-plugin-import-map';
 import logError from './log-error';
 import { isDir, isFile, stdout, isTruthy, removeScope } from './utils';
 import { getSizeInfo } from './lib/compressed-size';
@@ -28,7 +30,6 @@ import {
 } from './lib/option-normalization';
 import { getConfigFromPkgJson, getName } from './lib/package-info';
 import { shouldCssModules, cssModulesConfig } from './lib/css-modules';
-import eik from '@eik/rollup-plugin-import-map';
 
 // Extensions to use when resolving modules
 const EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx', '.es6', '.es', '.mjs'];
@@ -431,6 +432,7 @@ function createConfig(options, entry, format, writeMeta) {
 					postcss({
 						plugins: [
 							autoprefixer(),
+							cssImport(),
 							options.compress !== false &&
 								cssnano({
 									preset: 'default',
@@ -441,6 +443,7 @@ function createConfig(options, entry, format, writeMeta) {
 						// only write out CSS for the first bundle (avoids pointless extra files):
 						inject: false,
 						extract: !!writeMeta,
+						sourceMap: options.sourcemap,
 					}),
 					moduleAliases.length > 0 &&
 						alias({
