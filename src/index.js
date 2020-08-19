@@ -328,7 +328,7 @@ function createConfig(options, entry, format, writeMeta) {
 	} else {
 		external = external
 			.concat(peerDeps)
-			.concat(Object.keys(pkg.dependencies || {}));
+			.concat(Object.keys((format !== 'iife' && pkg.dependencies) || {}));
 	}
 
 	let globals = external.reduce((globals, name) => {
