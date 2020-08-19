@@ -28,6 +28,7 @@ import {
 } from './lib/option-normalization';
 import { getConfigFromPkgJson, getName } from './lib/package-info';
 import { shouldCssModules, cssModulesConfig } from './lib/css-modules';
+import eik from '@eik/rollup-plugin-import-map';
 
 // Extensions to use when resolving modules
 const EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx', '.es6', '.es', '.mjs'];
@@ -238,9 +239,14 @@ async function getEntries({ input, cwd }) {
 }
 
 function replaceName(filename, name) {
+	const baseFilename = basename(filename);
 	return resolve(
 		dirname(filename),
-		name + basename(filename).replace(/^[^.]+/, ''),
+		baseFilename.match(/^x\./)
+			? // Preserve the upstream microbundle behavior when the x.template.js convention is used
+			  name + baseFilename.replace(/^[^.]+/, '')
+			: // Use the name specified instead of overriding it to the package name
+			  baseFilename,
 	);
 }
 
@@ -279,6 +285,10 @@ function getMain({ options, entry, format }) {
 	mainsByFormat.cjs = replaceName(pkg['cjs:main'] || 'x.js', mainNoExtension);
 	mainsByFormat.umd = replaceName(
 		pkg['umd:main'] || 'x.umd.js',
+		mainNoExtension,
+	);
+	mainsByFormat.iife = replaceName(
+		pkg.nomodule || 'x.iife.js',
 		mainNoExtension,
 	);
 
@@ -417,6 +427,7 @@ function createConfig(options, entry, format, writeMeta) {
 			},
 			plugins: []
 				.concat(
+					modern && eik(),
 					postcss({
 						plugins: [
 							autoprefixer(),
