@@ -113,7 +113,7 @@
     "rollup-plugin-typescript2": "^0.25.3",
     "sade": "^1.7.3",
     "tiny-glob": "^0.2.6",
-    "tslib": "^1.13.0",
+    "tslib": "^2.0.0",
     "typescript": "^3.9.5"
   },
   "devDependencies": {
