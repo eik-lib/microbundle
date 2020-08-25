@@ -59,7 +59,7 @@ export default handler => {
 		.option(
 			'--css-modules',
 			'Turns on css-modules for all .css imports. Passing a string will override the scopeName. eg --css-modules="_[hash]"',
-			null,
+			false,
 		)
 		.example("microbundle --no-sourcemap # don't generate sourcemaps")
 		.option('--raw', 'Show raw byte size', false)
