@@ -318,7 +318,7 @@ function createConfig(options, entry, format, writeMeta) {
 	const aliasIds = moduleAliases.map(alias => alias.find);
 
 	const peerDeps = Object.keys(pkg.peerDependencies || {});
-	if (options.external === 'none') {
+	if (options.external === 'none' || format === 'iife' || format === 'modern') {
 		// bundle everything (external=[])
 	} else if (options.external) {
 		external = external.concat(peerDeps).concat(
@@ -328,7 +328,7 @@ function createConfig(options, entry, format, writeMeta) {
 	} else {
 		external = external
 			.concat(peerDeps)
-			.concat(Object.keys((format !== 'iife' && pkg.dependencies) || {}));
+			.concat(Object.keys(pkg.dependencies || {}));
 	}
 
 	let globals = external.reduce((globals, name) => {
@@ -431,8 +431,8 @@ function createConfig(options, entry, format, writeMeta) {
 					modern && eik(),
 					postcss({
 						plugins: [
-							autoprefixer(),
 							cssImport(),
+							autoprefixer(),
 							options.compress !== false &&
 								cssnano({
 									preset: 'default',
