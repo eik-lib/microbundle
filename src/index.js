@@ -430,23 +430,24 @@ function createConfig(options, entry, format, writeMeta) {
 			plugins: []
 				.concat(
 					modern && eik(),
-					postcss({
-						plugins: [
-							eikCss(),
-							cssImport(),
-							autoprefixer(),
-							options.compress !== false &&
-								cssnano({
-									preset: 'default',
-								}),
-						].filter(Boolean),
-						autoModules: shouldCssModules(options),
-						modules: cssModulesConfig(options),
-						// only write out CSS for the first bundle (avoids pointless extra files):
-						inject: false,
-						extract: !!writeMeta,
-						sourceMap: options.sourcemap,
-					}),
+					format !== 'iife' &&
+						postcss({
+							plugins: [
+								eikCss(),
+								cssImport(),
+								autoprefixer(),
+								options.compress !== false &&
+									cssnano({
+										preset: 'default',
+									}),
+							].filter(Boolean),
+							autoModules: shouldCssModules(options),
+							modules: cssModulesConfig(options),
+							// only write out CSS for the first bundle (avoids pointless extra files):
+							inject: false,
+							extract: !!writeMeta,
+							sourceMap: options.sourcemap,
+						}),
 					moduleAliases.length > 0 &&
 						alias({
 							// @TODO: this is no longer supported, but didn't appear to be required?
