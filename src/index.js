@@ -19,6 +19,7 @@ import postcss from 'rollup-plugin-postcss';
 import typescript from 'rollup-plugin-typescript2';
 import json from '@rollup/plugin-json';
 import eik from '@eik/rollup-plugin-import-map';
+import eikCss from '@eik/postcss-import-map';
 import logError from './log-error';
 import { isDir, isFile, stdout, isTruthy, removeScope } from './utils';
 import { getSizeInfo } from './lib/compressed-size';
@@ -431,6 +432,7 @@ function createConfig(options, entry, format, writeMeta) {
 					modern && eik(),
 					postcss({
 						plugins: [
+							eikCss(),
 							cssImport(),
 							autoprefixer(),
 							options.compress !== false &&
