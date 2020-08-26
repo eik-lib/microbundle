@@ -18,6 +18,7 @@ import alias from '@rollup/plugin-alias';
 import postcss from 'rollup-plugin-postcss';
 import typescript from 'rollup-plugin-typescript2';
 import json from '@rollup/plugin-json';
+import ignoreImport from 'rollup-plugin-ignore-import';
 import eik from '@eik/rollup-plugin-import-map';
 import eikCss from '@eik/postcss-import-map';
 import logError from './log-error';
@@ -430,6 +431,7 @@ function createConfig(options, entry, format, writeMeta) {
 			plugins: []
 				.concat(
 					modern && eik(),
+					format === 'iife' && ignoreImport({ extensions: ['.css'] }),
 					format !== 'iife' &&
 						postcss({
 							plugins: [
