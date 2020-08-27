@@ -9,6 +9,7 @@ import autoprefixer from 'autoprefixer';
 import cssImport from 'postcss-import';
 import cssnano from 'cssnano';
 import { rollup, watch } from 'rollup';
+import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
 import customBabel from './lib/babel-custom';
@@ -463,6 +464,11 @@ function createConfig(options, entry, format, writeMeta) {
 					commonjs({
 						// use a regex to make sure to include eventual hoisted packages
 						include: /\/node_modules\//,
+					}),
+					replace({
+						'process.env.NODE_ENV': JSON.stringify(
+							process.env.NODE_ENV || 'development',
+						),
 					}),
 					json(),
 					{
