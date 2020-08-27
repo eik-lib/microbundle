@@ -533,8 +533,6 @@ function createConfig(options, entry, format, writeMeta) {
 							modern,
 							compress: options.compress !== false,
 							targets: options.target === 'node' ? { node: '8' } : undefined,
-							pragma: options.jsx || 'h',
-							pragmaFrag: options.jsxFragment || 'Fragment',
 							typescript: !!useTypescript,
 						},
 					}),
