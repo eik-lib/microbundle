@@ -10,6 +10,7 @@ import cssImport from 'postcss-import';
 import cssnano from 'cssnano';
 import { rollup, watch } from 'rollup';
 import replace from '@rollup/plugin-replace';
+import builtinModules from 'builtin-modules';
 import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
 import customBabel from './lib/babel-custom';
@@ -287,7 +288,7 @@ function getMain({ options, entry, format }) {
 	);
 	mainsByFormat.cjs = replaceName(pkg['cjs:main'] || 'x.js', mainNoExtension);
 	mainsByFormat.umd = replaceName(
-		pkg['umd:main'] || 'x.umd.js',
+		pkg['umd:main'] || pkg.unpkg || 'x.umd.js',
 		mainNoExtension,
 	);
 	mainsByFormat.iife = replaceName(
@@ -318,6 +319,12 @@ function createConfig(options, entry, format, writeMeta) {
 
 	const moduleAliases = options.alias ? parseAliasArgument(options.alias) : [];
 	const aliasIds = moduleAliases.map(alias => alias.find);
+
+	// We want to silence rollup warnings for node builtins as we rollup-node-resolve threats them as externals anyway
+	// @see https://github.com/rollup/plugins/tree/master/packages/node-resolve/#resolving-built-ins-like-fs
+	if (options.target === 'node') {
+		external = external.concat(builtinModules);
+	}
 
 	const peerDeps = Object.keys(pkg.peerDependencies || {});
 	if (options.external === 'none' || format === 'iife' || format === 'modern') {
@@ -603,7 +610,8 @@ function createConfig(options, entry, format, writeMeta) {
 				return shebang[options.name];
 			},
 			format: modern ? 'es' : format,
-			name: options.name,
+			name: options.name && options.name.replace(/^global\./, ''),
+			extend: /^global\./.test(options.name),
 			dir: outputDir,
 			entryFileNames: outputEntryFileName,
 		},

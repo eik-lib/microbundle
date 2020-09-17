@@ -46,7 +46,9 @@ const createConfigItems = (babel, type, items) => {
 	});
 };
 
-const presetEnvRegex = RegExp(/@babel\/(preset-)?env/);
+const environmentPreset = '@babel/preset-env';
+// capture both @babel/env & @babel/preset-env (https://babeljs.io/docs/en/presets#preset-shorthand)
+const presetEnvRegex = new RegExp(/@babel\/(preset-)?env/);
 
 export default () => {
 	return createBabelInputPluginFactory(babelCore => {
@@ -83,12 +85,13 @@ export default () => {
 							name: 'babel-plugin-transform-replace-expressions',
 							replace: customOptions.defines,
 						},
-						!customOptions.modern && {
-							name: 'babel-plugin-transform-async-to-promises',
-							inlineHelpers: true,
-							externalHelpers: false,
-							minify: true,
-						},
+						!customOptions.modern &&
+							!isNodeTarget && {
+								name: 'babel-plugin-transform-async-to-promises',
+								inlineHelpers: true,
+								externalHelpers: false,
+								minify: true,
+							},
 						!customOptions.modern &&
 							!isNodeTarget && {
 								value: [
@@ -105,10 +108,11 @@ export default () => {
 							name: '@babel/plugin-proposal-class-properties',
 							loose: true,
 						},
-						!customOptions.modern && {
-							name: '@babel/plugin-transform-regenerator',
-							async: false,
-						},
+						!customOptions.modern &&
+							!isNodeTarget && {
+								name: '@babel/plugin-transform-regenerator',
+								async: false,
+							},
 						{
 							name: 'babel-plugin-macros',
 						},
@@ -120,10 +124,6 @@ export default () => {
 				const envIdx = (babelOptions.presets || []).findIndex(preset =>
 					presetEnvRegex.test(preset.file.request),
 				);
-
-				const environmentPreset = customOptions.modern
-					? '@babel/preset-modules'
-					: '@babel/preset-env';
 
 				if (envIdx !== -1) {
 					const preset = babelOptions.presets[envIdx];
@@ -139,6 +139,7 @@ export default () => {
 									},
 									preset.options,
 									{
+										bugfixes: customOptions.modern,
 										modules: false,
 										exclude: merge(
 											['transform-async-to-generator', 'transform-regenerator'],
@@ -163,6 +164,7 @@ export default () => {
 							modules: false,
 							loose: true,
 							useBuiltIns: false,
+							bugfixes: customOptions.modern,
 							exclude: [
 								'transform-async-to-generator',
 								'transform-regenerator',
