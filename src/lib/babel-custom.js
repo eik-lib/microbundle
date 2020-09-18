@@ -76,6 +76,9 @@ export default () => {
 							name: '@babel/plugin-syntax-import-meta',
 						},
 						{
+							name: 'babel-plugin-react-require',
+						},
+						{
 							name: '@babel/plugin-transform-react-jsx',
 						},
 						!customOptions.typescript && {
