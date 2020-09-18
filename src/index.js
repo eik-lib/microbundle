@@ -441,7 +441,10 @@ function createConfig(options, entry, format, writeMeta) {
 					postcss({
 						plugins: [
 							eikCss(),
-							cssImport(),
+							cssImport({
+								// Workaround webpack style css imports
+								resolve: id => id.replace(/^~/, ''),
+							}),
 							autoprefixer(),
 							options.compress !== false &&
 								cssnano({
