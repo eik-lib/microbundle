@@ -1,6 +1,6 @@
 {
   "name": "@eik/microbundle",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Zero-configuration bundler for tiny JS libs, powered by Rollup.",
   "main": "dist/microbundle.js",
   "source": "src/index.js",
