@@ -78,7 +78,7 @@ export default () => {
 						{
 							name: 'babel-plugin-react-require',
 						},
-						{
+						!customOptions.jsxImportSource && {
 							name: '@babel/plugin-transform-react-jsx',
 						},
 						!customOptions.typescript && {
@@ -158,22 +158,31 @@ export default () => {
 						},
 					);
 				} else {
-					babelOptions.presets = createConfigItems(babelCore, 'preset', [
-						{
-							name: environmentPreset,
-							targets: customOptions.modern
-								? ESMODULES_TARGET
-								: customOptions.targets,
-							modules: false,
-							loose: true,
-							useBuiltIns: false,
-							bugfixes: customOptions.modern,
-							exclude: [
-								'transform-async-to-generator',
-								'transform-regenerator',
-							],
-						},
-					]);
+					babelOptions.presets = createConfigItems(
+						babelCore,
+						'preset',
+						[
+							{
+								name: environmentPreset,
+								targets: customOptions.modern
+									? ESMODULES_TARGET
+									: customOptions.targets,
+								modules: false,
+								loose: true,
+								useBuiltIns: false,
+								bugfixes: customOptions.modern,
+								exclude: [
+									'transform-async-to-generator',
+									'transform-regenerator',
+								],
+							},
+							customOptions.jsxImportSource && {
+								name: '@babel/preset-react',
+								runtime: 'automatic',
+								importSource: customOptions.jsxImportSource,
+							},
+						].filter(Boolean),
+					);
 				}
 
 				// Merge babelrc & our plugins together
