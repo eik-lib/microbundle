@@ -8,7 +8,7 @@ This fork is currently serving two purposes:
 2. Provide optimal defaults for how FINN.no is using Eik.
 
 We see the error of our ways and in the spirit of making upstream contributions to microbundle as easy as possible, we'll refactor this fork to only serve purpose 1. We'll create a new package on our GHE for FINN.no that will wrap this fork and implement the features that are useful to us but perhaps not to non-FINN use cases.
-The long term plan is that we want to delete this fork, and make our internal microbundle wrapper simply wrap microbundle directly instead of our fork.
+The long term plan is that we want to delete this fork and make our internal microbundle wrapper simply wrap microbundle directly instead of our fork.
 
 ## Functionality we intend to contribute upstream
 
