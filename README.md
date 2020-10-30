@@ -14,7 +14,7 @@ The long term plan is that we want to delete this fork and make our internal mic
 
 These are the features that are the primary reason for our fork, and that we intend to contribute upstream in order to allow us to stop maintaining this fork and return to using microbundle directly.
 
-- support import mapping.
+- support import mapping ESM.
 - CSS import mapping
 - postcss-import plugin.
 - `@rollup/plugin-replace` are added and setup to replace `process.env.NODE_ENV`, a behavior which browserify and webpack does by default.
