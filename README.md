@@ -10,6 +10,10 @@ This fork is currently serving two purposes:
 We see the error of our ways and in the spirit of making upstream contributions to microbundle as easy as possible, we'll refactor this fork to only serve purpose 1. We'll create a new package on our GHE for FINN.no that will wrap this fork and implement the features that are useful to us but perhaps not to non-FINN use cases.
 The long term plan is that we want to delete this fork and make our internal microbundle wrapper simply wrap microbundle directly instead of our fork.
 
+## [Usage instructions](https://eik.dev/docs/mapping_bundling)
+
+This fork isn't intended to stay around, once we microbundle supports supports import maps we'll update the docs in the above link to point to microbundle instead of this fork.
+
 ## Functionality we intend to contribute upstream
 
 These are the features that are the primary reason for our fork, and that we intend to contribute upstream in order to allow us to stop maintaining this fork and return to using microbundle directly.
