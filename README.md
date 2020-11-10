@@ -12,7 +12,7 @@ The long term plan is that we want to delete this fork and make our internal mic
 
 ## [Usage instructions](https://eik.dev/docs/mapping_bundling)
 
-This fork isn't intended to stay around, once we microbundle supports supports import maps we'll update the docs in the above link to point to microbundle instead of this fork.
+This fork isn't intended to stay around, once microbundle supports import maps we'll update the docs in the above link to point to microbundle instead.
 
 ## Functionality we intend to contribute upstream
 
