@@ -82,7 +82,7 @@
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-flow": "^7.10.1",
     "@babel/preset-react": "^7.10.4",
-    "@eik/postcss-import-map": "1.2.2",
+    "@eik/postcss-import-map": "1.2.3",
     "@eik/rollup-plugin-import-map": "^1.0.2",
     "@rollup/plugin-alias": "^3.1.1",
     "@rollup/plugin-babel": "^5.0.3",
