@@ -31,7 +31,7 @@ export default handler => {
 	prog
 		.version(version)
 		.option('--entry, -i', 'Entry module(s)')
-		.option('--output, -o', 'Directory to place build files into', 'dist')
+		.option('--output, -o', 'Directory to place build files into')
 		.option(
 			'--format, -f',
 			`Only build specified formats (any of ${DEFAULT_FORMATS} or iife)`,
@@ -59,7 +59,7 @@ export default handler => {
 		.option(
 			'--css-modules',
 			'Turns on css-modules for all .css imports. Passing a string will override the scopeName. eg --css-modules="_[hash]"',
-			false,
+			null,
 		)
 		.example("microbundle --no-sourcemap # don't generate sourcemaps")
 		.option('--raw', 'Show raw byte size', false)
