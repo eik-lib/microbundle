@@ -80,6 +80,8 @@ export default () => {
 						},
 						!customOptions.jsxImportSource && {
 							name: '@babel/plugin-transform-react-jsx',
+							pragma: customOptions.pragma || 'h',
+							pragmaFrag: customOptions.pragmaFrag || 'Fragment',
 						},
 						!customOptions.typescript && {
 							name: '@babel/plugin-transform-flow-strip-types',
