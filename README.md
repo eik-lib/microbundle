@@ -31,6 +31,5 @@ These features are defaults and other options that make sense to the way FINN.no
 - CSS modules (`--css-modules`) are disabled by default, originally it's enabled by default.
 - `babel-plugin-react-require` is added and setup, however the new jsx-runtime transform in `@babel/preset-react` introduced in `react@v17` makes this plugin no longer necessary.
 - using `-f modern` or `-f iife` will also behave as if you set `--externals none` as the `iife` fallback bundle always needs to include everything. And the `modern` formats are using the import map plugin anyways.
-- `--jsx` is changed from `h` to `React.createElement` and is ignored. The same is true for `--jsxFragment`, which is `Fragment` by default and configurable. In this fork, it's not configurable and hardcoded to `React.Fragment`.
 - The default value for formats `-f` is changed from `modern,es,cjs,umd` to `modern,iife`.
 - Originally the `--output` option didn't have a default value, the fork however sets it to `dist`.
