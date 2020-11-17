@@ -75,9 +75,11 @@ export default () => {
 						{
 							name: '@babel/plugin-syntax-import-meta',
 						},
-						{
-							name: 'babel-plugin-react-require',
-						},
+						!customOptions.jsxImportSource &&
+							customOptions.pragma === 'React.createElement' &&
+							customOptions.pragmaFrag === 'React.Fragment' && {
+								name: 'babel-plugin-react-require',
+							},
 						!customOptions.jsxImportSource && {
 							name: '@babel/plugin-transform-react-jsx',
 							pragma: customOptions.pragma || 'h',
