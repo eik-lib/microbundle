@@ -13,10 +13,3 @@ The long term plan is that we want to delete this fork and make our internal mic
 ## [Usage instructions](https://eik.dev/docs/mapping_bundling)
 
 This fork isn't intended to stay around, once microbundle supports import maps we'll update the docs in the above link to point to microbundle instead.
-
-## Functionality that will be moved to our internal abstraction
-
-These features are defaults and other options that make sense to the way FINN.no applications and libraries are set up. We recognize that these new defaults don't make sense to the majority of microbundle users. Thus they're all going away soon from this fork and set in an internal abstraction instead.
-
-- using `-f modern` or `-f iife` will also behave as if you set `--external none` as the `iife` fallback bundle always needs to include everything. And the `modern` formats are using the import map plugin anyways.
-- The default value for formats `-f` is changed from `modern,es,cjs,umd` to `modern,iife`.
