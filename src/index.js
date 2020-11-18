@@ -6,7 +6,6 @@ import { blue } from 'kleur';
 import { map, series } from 'asyncro';
 import glob from 'tiny-glob/sync';
 import autoprefixer from 'autoprefixer';
-import cssImport from 'postcss-import';
 import cssnano from 'cssnano';
 import { rollup, watch } from 'rollup';
 import builtinModules from 'builtin-modules';
@@ -20,7 +19,6 @@ import postcss from 'rollup-plugin-postcss';
 import typescript from 'rollup-plugin-typescript2';
 import json from '@rollup/plugin-json';
 import eik from '@eik/rollup-plugin-import-map';
-import eikCss from '@eik/postcss-import-map';
 import logError from './log-error';
 import { isDir, isFile, stdout, isTruthy, removeScope } from './utils';
 import { getSizeInfo } from './lib/compressed-size';
@@ -449,11 +447,6 @@ function createConfig(options, entry, format, writeMeta) {
 					modern && eik(),
 					postcss({
 						plugins: [
-							eikCss(),
-							cssImport({
-								// Workaround webpack style css imports
-								resolve: id => id.replace(/^~/, ''),
-							}),
 							autoprefixer(),
 							options.compress !== false &&
 								cssnano({
