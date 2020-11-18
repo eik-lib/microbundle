@@ -319,7 +319,7 @@ function createConfig(options, entry, format, writeMeta) {
 	}
 
 	const peerDeps = Object.keys(pkg.peerDependencies || {});
-	if (options.external === 'none' || format === 'iife' || format === 'modern') {
+	if (options.external === 'none') {
 		// bundle everything (external=[])
 	} else if (options.external) {
 		external = external.concat(peerDeps).concat(
