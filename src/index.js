@@ -244,14 +244,9 @@ async function getEntries({ input, cwd }) {
 }
 
 function replaceName(filename, name) {
-	const baseFilename = basename(filename);
 	return resolve(
 		dirname(filename),
-		baseFilename.match(/^x\./)
-			? // Preserve the upstream microbundle behavior when the x.template.js convention is used
-			  name + baseFilename.replace(/^[^.]+/, '')
-			: // Use the name specified instead of overriding it to the package name
-			  baseFilename,
+		name + basename(filename).replace(/^[^.]+/, ''),
 	);
 }
 
