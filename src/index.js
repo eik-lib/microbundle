@@ -287,10 +287,6 @@ function getMain({ options, entry, format }) {
 		pkg['umd:main'] || pkg.unpkg || 'x.umd.js',
 		mainNoExtension,
 	);
-	mainsByFormat.iife = replaceName(
-		pkg.nomodule || 'x.iife.js',
-		mainNoExtension,
-	);
 
 	return mainsByFormat[format] || mainsByFormat.cjs;
 }

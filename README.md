@@ -21,12 +21,10 @@ These are the features that are the primary reason for our fork, and that we int
 - support import mapping ESM.
 - CSS import mapping
 - postcss-import plugin.
-- the `iife` rollup format is enabled, used by ie11 fallbacks.
 
 ## Functionality that will be moved to our internal abstraction
 
 These features are defaults and other options that make sense to the way FINN.no applications and libraries are set up. We recognize that these new defaults don't make sense to the majority of microbundle users. Thus they're all going away soon from this fork and set in an internal abstraction instead.
 
-- `babel-plugin-react-require` is added and setup, however the new jsx-runtime transform in `@babel/preset-react` introduced in `react@v17` makes this plugin no longer necessary.
-- using `-f modern` or `-f iife` will also behave as if you set `--externals none` as the `iife` fallback bundle always needs to include everything. And the `modern` formats are using the import map plugin anyways.
+- using `-f modern` or `-f iife` will also behave as if you set `--external none` as the `iife` fallback bundle always needs to include everything. And the `modern` formats are using the import map plugin anyways.
 - The default value for formats `-f` is changed from `modern,es,cjs,umd` to `modern,iife`.
