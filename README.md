@@ -13,3 +13,14 @@ The long term plan is that we want to delete this fork and make our internal mic
 ## [Usage instructions](https://eik.dev/docs/mapping_bundling)
 
 This fork isn't intended to stay around, once microbundle supports import maps we'll update the docs in the above link to point to microbundle instead.
+
+# Scratchpad
+
+- `babel-plugin-react-require` removed.
+- `--import-map auto` enables import mapping, it's no longer always enabled when either `modern` or `iife` formats is used. And `--external none` is not shadow enabled anymore when import mapping is running.
+- default formats changed back to microbundle defaults.
+- support for `pkg.nomodule` to control `-f iife` file output naming removed.
+- filename template logic reverted to microbundle
+- removed `postcss-import`.
+- removed `@eik/postcss-import-map`
+- `esm` supported with import mapping, not just `modern`.
