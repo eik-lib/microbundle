@@ -14,14 +14,6 @@ The long term plan is that we want to delete this fork and make our internal mic
 
 This fork isn't intended to stay around, once microbundle supports import maps we'll update the docs in the above link to point to microbundle instead.
 
-## Functionality we intend to contribute upstream
-
-These are the features that are the primary reason for our fork, and that we intend to contribute upstream in order to allow us to stop maintaining this fork and return to using microbundle directly.
-
-- support import mapping ESM.
-- CSS import mapping
-- postcss-import plugin.
-
 ## Functionality that will be moved to our internal abstraction
 
 These features are defaults and other options that make sense to the way FINN.no applications and libraries are set up. We recognize that these new defaults don't make sense to the majority of microbundle users. Thus they're all going away soon from this fork and set in an internal abstraction instead.

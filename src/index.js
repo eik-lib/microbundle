@@ -464,7 +464,7 @@ function createConfig(options, entry, format, writeMeta) {
 						modules: cssModulesConfig(options),
 						// only write out CSS for the first bundle (avoids pointless extra files):
 						inject: false,
-						extract: format !== 'iife',
+						extract: !!writeMeta,
 						sourceMap: options.sourcemap,
 					}),
 					moduleAliases.length > 0 &&
