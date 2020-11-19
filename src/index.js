@@ -444,7 +444,9 @@ function createConfig(options, entry, format, writeMeta) {
 
 			plugins: []
 				.concat(
-					options.importMap === 'auto' && (modern || format === 'es') && eik(),
+					options['import-map'] === 'auto' &&
+						(modern || format === 'es') &&
+						eik(),
 					postcss({
 						plugins: [
 							autoprefixer(),
