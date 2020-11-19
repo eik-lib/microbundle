@@ -1,6 +1,6 @@
 {
   "name": "@eik/microbundle",
-  "version": "2.0.0",
+  "version": "2.0.0-canary.0",
   "description": "Zero-configuration bundler for tiny JS libs, powered by Rollup.",
   "main": "dist/microbundle.js",
   "source": "src/index.js",
