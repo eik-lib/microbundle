@@ -1,6 +1,7 @@
 {
 	"includeForks": true,
 	"extends": ["config:base", "group:linters"],
+	"dependencyDashboard": true,
 	"packageRules": [
 		{
 			"depTypeList": ["dependencies"],
