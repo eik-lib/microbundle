@@ -1,6 +1,6 @@
 {
 	"includeForks": true,
-	"extends": ["config:base", "group:linters"],
+	"extends": ["config:base", "group:linters", ":preserveSemverRanges"],
 	"dependencyDashboard": true,
 	"packageRules": [
 		{
