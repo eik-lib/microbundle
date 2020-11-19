@@ -6,7 +6,6 @@ import { blue } from 'kleur';
 import { map, series } from 'asyncro';
 import glob from 'tiny-glob/sync';
 import autoprefixer from 'autoprefixer';
-import cssnano from 'cssnano';
 import { rollup, watch } from 'rollup';
 import builtinModules from 'builtin-modules';
 import commonjs from '@rollup/plugin-commonjs';
@@ -296,16 +295,10 @@ function createConfig(options, entry, format, writeMeta) {
 	let { pkg } = options;
 
 	/** @type {(string|RegExp)[]} */
-	let external = ['dns', 'fs', 'path', 'url'].concat(
-		options.entries.filter(e => e !== entry),
-	);
+	let external = ['dns', 'fs', 'path', 'url'];
 
 	/** @type {Record<string, string>} */
 	let outputAliases = {};
-	// since we transform src/index.js, we need to rename imports for it:
-	if (options.multipleEntries) {
-		outputAliases['.'] = './' + basename(options.output);
-	}
 
 	const moduleAliases = options.alias ? parseAliasArgument(options.alias) : [];
 	const aliasIds = moduleAliases.map(alias => alias.find);
@@ -408,15 +401,12 @@ function createConfig(options, entry, format, writeMeta) {
 		inputOptions: {
 			// disable Rollup's cache for the modern build to prevent re-use of legacy transpiled modules:
 			cache,
-
 			input: entry,
 			external: id => {
 				if (id === 'babel-plugin-transform-async-to-promises/helpers') {
 					return false;
 				}
-				if (options.multipleEntries && id === '.') {
-					return true;
-				}
+
 				if (aliasIds.indexOf(id) >= 0) {
 					return false;
 				}
@@ -448,18 +438,13 @@ function createConfig(options, entry, format, writeMeta) {
 						(modern || format === 'es') &&
 						eik(),
 					postcss({
-						plugins: [
-							autoprefixer(),
-							options.compress !== false &&
-								cssnano({
-									preset: 'default',
-								}),
-						].filter(Boolean),
+						plugins: [autoprefixer()],
 						autoModules: shouldCssModules(options),
 						modules: cssModulesConfig(options),
 						// only write out CSS for the first bundle (avoids pointless extra files):
 						inject: false,
 						extract: !!writeMeta,
+						minimize: options.compress,
 						sourceMap: options.sourcemap,
 					}),
 					moduleAliases.length > 0 &&
@@ -550,7 +535,6 @@ function createConfig(options, entry, format, writeMeta) {
 					}),
 					options.compress !== false && [
 						terser({
-							sourcemap: true,
 							compress: Object.assign(
 								{
 									keep_infinity: true,
@@ -589,7 +573,7 @@ function createConfig(options, entry, format, writeMeta) {
 						},
 					],
 					{
-						writeBundle(bundle) {
+						writeBundle(_, bundle) {
 							config._sizeInfo = Promise.all(
 								Object.values(bundle).map(({ code, fileName }) => {
 									if (code) {
@@ -619,6 +603,7 @@ function createConfig(options, entry, format, writeMeta) {
 			extend: /^global\./.test(options.name),
 			dir: outputDir,
 			entryFileNames: outputEntryFileName,
+			exports: 'auto',
 		},
 	};
 
