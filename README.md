@@ -16,7 +16,7 @@ This fork isn't intended to stay around, once microbundle supports import maps w
 
 ### Pending PRs before this fork can be deleted
 
-- CSS source map support [#754](https://github.com/developit/microbundle/pull/754).
-- Upgrade all dependencies [#738](https://github.com/developit/microbundle/pull/738).
-- Upgrade rollup-plugin-postcss to PostCSS v8 [#335](https://github.com/egoist/rollup-plugin-postcss/pull/335).
+- ~~CSS source map support [#754](https://github.com/developit/microbundle/pull/754).~~
+- ~~Upgrade all dependencies [#738](https://github.com/developit/microbundle/pull/738).~~
+- ~~Upgrade rollup-plugin-postcss to PostCSS v8 [#335](https://github.com/egoist/rollup-plugin-postcss/pull/335).~~
 - Support import maps [#759](https://github.com/developit/microbundle/pull/759)
