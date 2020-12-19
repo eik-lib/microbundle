@@ -1679,17 +1679,6 @@ exports[`fixtures build esnext-ts with microbundle 6`] = `
 "
 `;
 
-exports[`fixtures build import-map with microbundle 1`] = `
-"Used script: microbundle
-
-Directory tree:
-
-import-map
-
-
-Build \\"importMap\\" to dist:"
-`;
-
 exports[`fixtures build inline-source-map with microbundle 1`] = `
 "Used script: microbundle --sourcemap inline
 
