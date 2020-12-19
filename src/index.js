@@ -8,6 +8,7 @@ import glob from 'tiny-glob/sync';
 import autoprefixer from 'autoprefixer';
 import { rollup, watch } from 'rollup';
 import builtinModules from 'builtin-modules';
+import resolveFrom from 'resolve-from';
 import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
 import customBabel from './lib/babel-custom';
@@ -57,7 +58,11 @@ export default async function microbundle(inputOptions) {
 	options.name = finalName;
 	options.pkg.name = pkgName;
 
-	if (options.sourcemap !== false) {
+	if (options.sourcemap === 'inline') {
+		console.log(
+			'Warning: inline sourcemaps should only be used for debugging purposes.',
+		);
+	} else if (options.sourcemap !== false) {
 		options.sourcemap = true;
 	}
 
@@ -360,6 +365,7 @@ function createConfig(options, entry, format, writeMeta) {
 			: () => resolve(options.cwd, 'mangle.json');
 
 	const useTypescript = extname(entry) === '.ts' || extname(entry) === '.tsx';
+	const emitDeclaration = !!(options.generateTypes || pkg.types || pkg.typings);
 
 	const escapeStringExternals = ext =>
 		ext instanceof RegExp ? ext.source : escapeStringRegexp(ext);
@@ -443,7 +449,7 @@ function createConfig(options, entry, format, writeMeta) {
 						modules: cssModulesConfig(options),
 						// only write out CSS for the first bundle (avoids pointless extra files):
 						inject: false,
-						extract: !!writeMeta,
+						extract: options.css !== 'inline',
 						minimize: options.compress,
 						sourceMap: options.sourcemap,
 					}),
@@ -463,6 +469,8 @@ function createConfig(options, entry, format, writeMeta) {
 					commonjs({
 						// use a regex to make sure to include eventual hoisted packages
 						include: /\/node_modules\//,
+						esmExternals: false,
+						requireReturnsDefault: 'namespace',
 					}),
 					json(),
 					{
@@ -474,15 +482,20 @@ function createConfig(options, entry, format, writeMeta) {
 							map: null,
 						}),
 					},
-					useTypescript &&
+					(useTypescript || emitDeclaration) &&
 						typescript({
-							typescript: require('typescript'),
+							typescript: require(resolveFrom.silent(
+								options.cwd,
+								'typescript',
+							) || 'typescript'),
 							cacheRoot: `./node_modules/.cache/.rts2_cache_${format}`,
 							useTsconfigDeclarationDir: true,
 							tsconfigDefaults: {
 								compilerOptions: {
 									sourceMap: options.sourcemap,
 									declaration: true,
+									allowJs: true,
+									emitDeclarationOnly: options.generateTypes && !useTypescript,
 									declarationDir: getDeclarationDir({ options, pkg }),
 									jsx: 'preserve',
 									jsxFactory:
@@ -545,14 +558,15 @@ function createConfig(options, entry, format, writeMeta) {
 								},
 								minifyOptions.compress || {},
 							),
-							output: {
+							format: {
 								// By default, Terser wraps function arguments in extra parens to trigger eager parsing.
 								// Whether this is a good idea is way too specific to guess, so we optimize for size by default:
 								wrap_func_args: false,
-								comments: false,
+								comments: /^\s*([@#]__[A-Z]__\s*$|@cc_on)/,
+								preserve_annotations: true,
 							},
-							warnings: true,
-							ecma: modern ? 9 : 5,
+							module: modern,
+							ecma: modern ? 2017 : 5,
 							toplevel: modern || format === 'cjs' || format === 'es',
 							mangle: Object.assign({}, minifyOptions.mangle || {}),
 							nameCache,
@@ -572,7 +586,28 @@ function createConfig(options, entry, format, writeMeta) {
 							},
 						},
 					],
-					{
+					/** @type {import('rollup').Plugin} */
+					({
+						name: 'postprocessing',
+						// Rollup 2 injects globalThis, which is nice, but doesn't really make sense for Microbundle.
+						// Only ESM environments necessitate globalThis, and UMD bundles can't be properly loaded as ESM.
+						// So we remove the globalThis check, replacing it with `this||self` to match Rollup 1's output:
+						renderChunk(code, chunk, opts) {
+							if (opts.format === 'umd') {
+								// minified:
+								code = code.replace(
+									/([a-zA-Z$_]+)="undefined"!=typeof globalThis\?globalThis:(\1\|\|self)/,
+									'$2',
+								);
+								// unminified:
+								code = code.replace(
+									/(global *= *)typeof +globalThis *!== *['"]undefined['"] *\? *globalThis *: *(global *\|\| *self)/,
+									'$1$2',
+								);
+								return { code, map: null };
+							}
+						},
+						// Grab size info before writing files to disk:
 						writeBundle(_, bundle) {
 							config._sizeInfo = Promise.all(
 								Object.values(bundle).map(({ code, fileName }) => {
@@ -582,7 +617,7 @@ function createConfig(options, entry, format, writeMeta) {
 								}),
 							).then(results => results.filter(Boolean).join('\n'));
 						},
-					},
+					}),
 				)
 				.filter(Boolean),
 		},

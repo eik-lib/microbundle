@@ -1,4 +1,6 @@
-# Synced with [`microbundle@v0.12.4`](https://github.com/developit/microbundle/compare/master...eik-lib:main?w=1)
+# Last synced with upstream master [`52a1771`](https://github.com/eik-lib/microbundle/compare/main...developit:52a1771?w=1)
+
+> [Check how this fork diverges from upstream.](https://github.com/developit/microbundle/compare/master...eik-lib:main?w=1)
 
 [Why did we fork microbundle?](https://eik.dev/docs/mapping_bundling#why-we-forked-microbundle)
 
